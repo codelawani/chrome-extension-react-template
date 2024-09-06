@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "React Chrome Extension",
+    "name": "Link Shortener",
     "version": "1.0.0",
-    "description": "A simple React app as a Chrome extension",
+    "description": "A simple URL shortener using bitly",
     "action": {
       "default_popup": "index.html"
     },

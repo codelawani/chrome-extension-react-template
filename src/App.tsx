@@ -46,7 +46,7 @@ function App() {
 
   return (
     <div className='text-blue-500'>
-      <h1>Current Tab URL</h1>
+      <h3>Create URL</h3>
       <p>{currentUrl}</p>
       // Button to shorten the URL via Bitly's API
       <button onClick={() => handleUrl(currentUrl)}>Shorten Url</button>
