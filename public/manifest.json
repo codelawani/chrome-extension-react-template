@@ -6,5 +6,6 @@
     "action": {
       "default_popup": "index.html"
     },
-    "permissions": ["tabs"]
+    "permissions": ["tabs"],
+    "bitly_access_token": "098fb4a1af6ce41c1f10338e1aa2c3b02f0904f4"
   }
