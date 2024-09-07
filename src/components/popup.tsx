@@ -20,7 +20,7 @@ export default function Popup() {
       <CardHeader>
         <CardTitle className="font-bold text-2xl">Create Short Link</CardTitle>
         <CardDescription>
-          Generate a{" "}
+          Generate a fake{" "}
           <a href="https://bitly.com" target="_blank">
             Bitly
           </a>{" "}

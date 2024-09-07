@@ -1,17 +1,30 @@
-import { Dispatch, useState } from "react";
+import { Dispatch, useState, useEffect } from "react";
 import { Label } from "./ui/label";
 import ClearableInput from "./clearable-input";
 import { Button } from "./ui/button";
 import { TShortUrl } from "@/lib/types";
 import { shortenUrl, validateUrl } from "@/lib/utils";
+const defaultVal = "https://ui.shadcn.com/docs/components/carousel";
+async function getCurrentTabUrl() {
+  const queryOptions = { active: true, lastFocusedWindow: true };
+  const tabs = await chrome.tabs.query(queryOptions);
+  return tabs[0]?.url ?? defaultVal;
+}
 
 export default function UrlHandler({
   setShortUrl,
 }: {
   setShortUrl: Dispatch<React.SetStateAction<TShortUrl>>;
 }) {
-  const defaultVal = "https://ui.shadcn.com/docs/components/carousel";
   const [longUrl, setLongUrl] = useState(defaultVal);
+  useEffect(() => {
+    const fetchUrl = async () => {
+      const url = await getCurrentTabUrl(); // Fetch the current tab URL
+      setLongUrl(url);
+    };
+
+    fetchUrl();
+  }, []);
   const handleShortUrl = async (longUrl: string) => {
     try {
       const res = validateUrl(longUrl);

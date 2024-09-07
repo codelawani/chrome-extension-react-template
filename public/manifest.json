@@ -1,11 +1,10 @@
 {
-    "manifest_version": 3,
-    "name": "Link Shortener",
-    "version": "1.0.0",
-    "description": "A simple URL shortener using bitly",
-    "action": {
-      "default_popup": "index.html"
-    },
-    "permissions": ["tabs"],
-    "bitly_access_token": "098fb4a1af6ce41c1f10338e1aa2c3b02f0904f4"
-  }
+  "manifest_version": 3,
+  "name": "Link Shortener",
+  "version": "1.0.0",
+  "description": "A simple URL shortener using bitly",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["tabs"]
+}

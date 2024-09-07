@@ -20,7 +20,7 @@ export function validateUrl(url: string) {
     throw new Error("Something went wrong");
   }
 }
-function genRandString(length = 5) {
+function genRandString(length = 7) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
