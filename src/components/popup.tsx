@@ -8,12 +8,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { z } from "zod";
 import { Dispatch, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { X } from "lucide-react";
 
-export function CopyButton({ text = "bit.ly/4ee2kgf" }: { text?: string }) {
+type TShortUrl = { text: string; success: boolean };
+export function CopyButton({ text, success }: TShortUrl) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -38,7 +39,7 @@ export function CopyButton({ text = "bit.ly/4ee2kgf" }: { text?: string }) {
           className="text-secondary-foreground flex-grow "
           aria-label="Text to copy"
         >
-          {text}
+          {success ? text : <Error text={text} />}
         </span>
         <Button
           onClick={handleCopy}
@@ -56,6 +57,18 @@ export function CopyButton({ text = "bit.ly/4ee2kgf" }: { text?: string }) {
       </div>
     </div>
   );
+}
+
+export function validateUrl(url: string) {
+  const urlSchema = z
+    .string()
+    .url()
+    .startsWith("https://", { message: "Invalid/Insecure URL" });
+  const res = urlSchema.safeParse(url);
+  return res.success ? res.data : res.error.format()._errors[0];
+}
+export function Error({ text }: { text: string }) {
+  return <p className="text-red-500 font-bold">{text + "!"}</p>;
 }
 
 export function ClearableInput({
@@ -99,6 +112,9 @@ export function ClearableInput({
 }
 const shortenUrl = async (longUrl: string) => {
   const token = import.meta.env.VITE_BITLY_TOKEN;
+  const res = validateUrl(longUrl);
+  console.log(res);
+  return longUrl === res ? "Success!" : <Error text={res} />;
 
   const response = await fetch("https://api-ssl.bitly.com/v4/shorten", {
     method: "POST",
@@ -118,13 +134,17 @@ const shortenUrl = async (longUrl: string) => {
 function UrlHandler({
   setShortUrl,
 }: {
-  setShortUrl: Dispatch<React.SetStateAction<string>>;
+  setShortUrl: Dispatch<React.SetStateAction<TShortUrl>>;
 }) {
   const defaultVal = "https://ui.shadcn.com/docs/components/carousel";
   const [longUrl, setLongUrl] = useState(defaultVal);
   const handleShortUrl = async (longUrl: string) => {
-    const shortUrl = await shortenUrl(longUrl);
-    setShortUrl(shortUrl);
+    const res = validateUrl(longUrl);
+    if (res === longUrl) {
+      const shortUrl = await shortenUrl(longUrl);
+      setShortUrl(shortUrl);
+    } else {
+    }
   };
   return (
     <div className="flex flex-col space-y-1.5">
@@ -142,8 +162,8 @@ function UrlHandler({
 }
 // type iPopUp = {  longUrl: string }
 export default function Popup() {
-  const text = "bit.ly/4ee2kgf";
-  const [shortUrl, setShortUrl] = useState(text);
+  const dummy = { text: "bit.ly/4ee2kgf", success: true };
+  const [shortUrl, setShortUrl] = useState<TShortUrl>(dummy);
 
   return (
     <Card className="rounded-none">
@@ -161,7 +181,7 @@ export default function Popup() {
         <div className="space-y-4">
           <UrlHandler setShortUrl={setShortUrl} />
           <div className="flex flex-col space-y-1.5">
-            <CopyButton text={shortUrl} />
+            <CopyButton text={shortUrl.text} success={shortUrl.success} />
           </div>
         </div>
       </CardContent>
