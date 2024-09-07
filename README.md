@@ -6,14 +6,14 @@ Read this [article](https://civilgoody.notion.site/How-I-Built-a-Chrome-Extensio
 ## Features
 
 1. **_Auto Copy current tab URL!!!_**
-   ![image showing extension copying current tab](demos/auto-copy-tab.png)
+   ![image showing extension copying current tab](./demos/auto-copy-tab.png)
 2. **_Clear Input Field button!!!_**
 
-   ![image showing clear input field button](demos/clear-input.png)
+   ![image showing clear input field button](./demos/clear-input.png)
 
 3. **_Copy generated Bitly link to clipboard!!!_**
 
-   ![image showing copy generated Bitly link](demos/copy-link.png)
+   ![image showing copy generated Bitly link](./demos/copy-link.png)
 
 ## How it works
 
