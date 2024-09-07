@@ -13,7 +13,7 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { X } from "lucide-react";
 
-export function CopyButton({ text = "Hello, world!" }: { text?: string }) {
+export function CopyButton({ text = "Limit reached!" }: { text?: string }) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -93,10 +93,36 @@ export function ClearableInput({ defaultValue }: { defaultValue: string }) {
     </div>
   );
 }
+const shortenUrl = async (longUrl: string) => {
+  const token = import.meta.env.VITE_BITLY_TOKEN;
+
+  const response = await fetch("https://api-ssl.bitly.com/v4/shorten", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      long_url: longUrl,
+    }),
+  });
+  const data = await response.json();
+  console.log(data);
+  console.log("Shortened URL:", data.link);
+  return data.link.replace("https://", "");
+};
+
 // type iPopUp = {  longUrl: string }
 export default function Popup() {
   const text = "bit.ly/h3ksol";
-  // const bitlyToken
+  const [shortUrl, setShortUrl] = useState(text);
+  const [longUrl, setLongUrl] = useState(
+    "https://ui.shadcn.com/docs/components/carousel"
+  );
+  const handleClick = async (longUrl: string) => {
+    const shortUrl = await shortenUrl(longUrl);
+    setShortUrl(shortUrl);
+  };
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -113,14 +139,18 @@ export default function Popup() {
         <div className="space-y-4">
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="name">Long URL</Label>
-            <ClearableInput defaultValue="https://ui.shadcn.com/docs/components/carousel" />
-            <Button className="w-full font-bold" variant="custom">
+            <ClearableInput defaultValue={longUrl} />
+            <Button
+              className="w-full font-bold"
+              variant="custom"
+              onClick={() => handleClick(longUrl)}
+            >
               Generate Short URL
             </Button>
           </div>
 
           <div className="flex flex-col space-y-1.5">
-            <CopyButton text={text} />
+            <CopyButton text={shortUrl} />
           </div>
         </div>
       </CardContent>
