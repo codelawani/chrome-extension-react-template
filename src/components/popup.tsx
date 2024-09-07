@@ -9,11 +9,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { X } from "lucide-react";
 
-export function CopyButton({ text = "Limit reached!" }: { text?: string }) {
+export function CopyButton({ text = "bit.ly/4ee2kgf" }: { text?: string }) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -32,7 +32,7 @@ export function CopyButton({ text = "Limit reached!" }: { text?: string }) {
   };
 
   return (
-    <div className="max-w-sm mx-auto space-y-2">
+    <div className="mx-auto space-y-2">
       <div className="flex items-center space-x-2 bg-secondary p-2 rounded-md border-2">
         <span
           className="text-secondary-foreground flex-grow "
@@ -58,17 +58,21 @@ export function CopyButton({ text = "Limit reached!" }: { text?: string }) {
   );
 }
 
-export function ClearableInput({ defaultValue }: { defaultValue: string }) {
-  const [inputValue, setInputValue] = useState(defaultValue);
-
+export function ClearableInput({
+  inputVal,
+  setInputVal,
+}: {
+  inputVal: string;
+  setInputVal: Dispatch<React.SetStateAction<string>>;
+}) {
   // Function to handle input changes
   const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
+    setInputVal(e.target.value);
   };
 
   // Function to clear the input field
   const handleClear = () => {
-    setInputValue("");
+    setInputVal("");
   };
 
   return (
@@ -76,7 +80,7 @@ export function ClearableInput({ defaultValue }: { defaultValue: string }) {
       <div className="flex items-center space-x-2">
         <Input
           type="text"
-          value={inputValue}
+          value={inputVal}
           onChange={handleInputChange}
           className="p-2 border border-gray-300 rounded-md w-full"
         />
@@ -111,20 +115,38 @@ const shortenUrl = async (longUrl: string) => {
   console.log("Shortened URL:", data.link);
   return data.link.replace("https://", "");
 };
-
-// type iPopUp = {  longUrl: string }
-export default function Popup() {
-  const text = "bit.ly/h3ksol";
-  const [shortUrl, setShortUrl] = useState(text);
-  const [longUrl, setLongUrl] = useState(
-    "https://ui.shadcn.com/docs/components/carousel"
-  );
-  const handleClick = async (longUrl: string) => {
+function UrlHandler({
+  setShortUrl,
+}: {
+  setShortUrl: Dispatch<React.SetStateAction<string>>;
+}) {
+  const defaultVal = "https://ui.shadcn.com/docs/components/carousel";
+  const [longUrl, setLongUrl] = useState(defaultVal);
+  const handleShortUrl = async (longUrl: string) => {
     const shortUrl = await shortenUrl(longUrl);
     setShortUrl(shortUrl);
   };
   return (
-    <Card className="w-[350px]">
+    <div className="flex flex-col space-y-1.5">
+      <Label htmlFor="name">Long URL</Label>
+      <ClearableInput inputVal={longUrl} setInputVal={setLongUrl} />
+      <Button
+        className="w-full font-bold"
+        variant="custom"
+        onClick={() => handleShortUrl(longUrl)}
+      >
+        Generate Short URL
+      </Button>
+    </div>
+  );
+}
+// type iPopUp = {  longUrl: string }
+export default function Popup() {
+  const text = "bit.ly/4ee2kgf";
+  const [shortUrl, setShortUrl] = useState(text);
+
+  return (
+    <Card className="rounded-none">
       <CardHeader>
         <CardTitle className="font-bold text-2xl">Create Short Link</CardTitle>
         <CardDescription>
@@ -137,18 +159,7 @@ export default function Popup() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="name">Long URL</Label>
-            <ClearableInput defaultValue={longUrl} />
-            <Button
-              className="w-full font-bold"
-              variant="custom"
-              onClick={() => handleClick(longUrl)}
-            >
-              Generate Short URL
-            </Button>
-          </div>
-
+          <UrlHandler setShortUrl={setShortUrl} />
           <div className="flex flex-col space-y-1.5">
             <CopyButton text={shortUrl} />
           </div>
