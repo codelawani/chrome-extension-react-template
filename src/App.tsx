@@ -1,6 +1,6 @@
-import './App.css'
+import "./App.css";
 // import { useEffect, useState } from 'react';
-import Popup from './components/popup';
+import Popup from "./components/popup";
 
 // const shortenUrl = async (longUrl: string) => {
 //   const manifestData = chrome.runtime.getManifest();
@@ -45,14 +45,14 @@ function App() {
   //   fetchUrl();
   // }, []);
 
-  return <Popup />
-    // <div className='text-blue-500'>
-    //   <h3>Create URL</h3>
-    //   <p>{currentUrl}</p>
-    //   // Button to shorten the URL via Bitly's API
-    //   <button onClick={() => handleUrl(currentUrl)}>Shorten Url</button>
-    //   <p><span>Bitly Link: </span>{shortUrl}</p>
-    // </div>
+  return <Popup />;
+  // <div className='text-blue-500'>
+  //   <h3>Create URL</h3>
+  //   <p>{currentUrl}</p>
+  //   // Button to shorten the URL via Bitly's API
+  //   <button onClick={() => handleUrl(currentUrl)}>Shorten Url</button>
+  //   <p><span>Bitly Link: </span>{shortUrl}</p>
+  // </div>
 }
 
 export default App;
